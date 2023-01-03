@@ -7,8 +7,13 @@ services:
     volumes:
       - firefly_iii_upload:/var/www/html/storage/upload
     env_file: .env
+    labels:
+      - traefik.http.routers.app-secure.entrypoints:websecure
+      - traefik.docker.network:portainer_default
+      - traefik.enable:true
+      - traefik.http.routers.app-secure.rule	Host(`money.warehouse.lan`)
     ports:
-      - 80:8080
+      - 8080
     depends_on:
       - db
   db:
@@ -21,6 +26,11 @@ services:
     image: fireflyiii/data-importer:latest
     restart: always
     env_file: .fidi.env
+    labels:
+      - traefik.http.routers.app-secure.entrypoints:websecure
+      - traefik.docker.network:portainer_default
+      - traefik.enable:true
+      - traefik.http.routers.app-secure.rule	Host(`moneyimporter.warehouse.lan`)
     ports:
       - 8081:8080
     depends_on:
@@ -28,3 +38,4 @@ services:
 volumes:
   firefly_iii_upload:
   firefly_iii_db:
+
