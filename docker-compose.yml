@@ -147,6 +147,8 @@ services:
       PGSQL_SSL_KEY: "null"
       PGSQL_SSL_CRL_FILE: "null"
       PGSQL_SCHEMA: public
+    labels:
+      - "traefik.enable=false"
     volumes:
       - firefly_iii_db:/var/lib/mysql
   fidi:
