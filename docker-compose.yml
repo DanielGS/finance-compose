@@ -103,12 +103,15 @@ services:
       DEMO_PASSWORD: ""
       IS_HEROKU: "false"
       FIREFLY_III_LAYOUT: v1
-      APP_URL: http://localhost
+      APP_URL: http://finances.warehouse.lan
     labels:
-      traefik.http.routers.app-secure.entrypoints: websecure
-      traefik.docker.network: portainer_default
-      traefik.enable: true
-      traefik.http.routers.app-secure.rule: Host(`money.warehouse.lan`)
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.moneyimporter.rule=Host(`finances.warehouse.lan`)"
+      - "traefik.http.routers.moneyimporter.entrypoints=websecure"
+      - "traefik.http.services.moneyimporter.loadbalancer.server.port=8080"
+      - "traefik.http.routers.moneyimporter.service=moneyimporter"
+      - "traefik.http.routers.moneyimporter.tls=true"
 #    ports:
 #      - 8080
     depends_on:
@@ -148,7 +151,7 @@ services:
     image: fireflyiii/data-importer:latest
     restart: always
     environment:
-      FIREFLY_III_URL: http://app:8080
+      FIREFLY_III_URL: https://finances.warehouse.lan
       VANITY_URL: ""
       FIREFLY_III_ACCESS_TOKEN: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMGQ4NzY5MjgxZmZjYzFkZDhmYWViZGViYzExNjg4MzM3YzNjMzM4YmJmNjJmMDMzZWM5YTBjNGQxZDEyYWU2NWY1YTRmYjc5MjQwM2RhNjQiLCJpYXQiOjE2NzE3OTI1MDIuMDc2MjU2LCJuYmYiOjE2NzE3OTI1MDIuMDc2MjU4LCJleHAiOjE3MDMzMjg1MDIuMDYzOTczLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.mLSk5cSBUoQ_CVILVSKEZa-SBAjIVaxhbyZDiPL5k63i5IfZ910i5wgYBPze5SQgnnurX9N49S7uIdMyJLvA6bIuEqVpYT8MnGNOZWrpZ3clDzqB1rNf71RoafP1U5MOlnlGNKrCSUgdHueiH9X4B-tUgY0lqnZAvtIZeB_vd5uquWTU9B1g2JnAu3EakLRTCKd73Cs02CbMPBfmfl3-Wp13fDi8sUkf0OABtSczEMd6oJvJMXPFC4iWb8W3Tx84DeUT_S9Ol3UbIOYKeXuZFNO4bOz-2a972DBzup9lvvASyYXDkxyCCSPWCdhWFVw3B098-Z3G-z31Bxk6EfSMjaJ-lT1c0_y3HILEL4mXTUKeJ6rB1e8QSzGi91VEyzwtJtSI4W3VkJCs3kUEkbLsrDnmJCZDFzZYoDEjRNeCaHU7ZD-9eZcbsAo6bZpqhCzBh5C8p7pr1irg98CHFzbEk6YR_wQgg3cPMdTjoKIP8Oz8Kh-QsuuQ0EwJebsINkN4AOmu_EWsp2UCX2keMH8LsqmLScGu0OXFlXUce1vYpLEsecJnrYKWb4u2HiG_NBKiiQqZHh3fWXI2yqLw9an1hVCha4oq_kvHrntU3Q4HB5BFdgrG2k1CqYphfDPcFmw5br6cbj5W6tZo6Ifkgxo2jDnAx-8lBXrpeDDof0MHYZQ
       FIREFLY_III_CLIENT_ID: ""
@@ -201,14 +204,15 @@ services:
       TRACKER_SITE_ID: ""
       TRACKER_URL: ""
       APP_NAME: DataImporter
-      APP_URL: http://localhost:8081
+      APP_URL: https://moneyimporter.warehouse.lan
     labels:
-      traefik.http.routers.app-secure.entrypoints: websecure
-      traefik.docker.network: portainer_default
-      traefik.enable: true
-      traefik.http.routers.app-secure.rule: Host(`moneyimporter.warehouse.lan`)
-#    ports:
-#      - 8081:8080
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.moneyimporter.rule=Host(`moneyimporter.warehouse.lan`)"
+      - "traefik.http.routers.moneyimporter.entrypoints=websecure"
+      - "traefik.http.services.moneyimporter.loadbalancer.server.port=8080"
+      - "traefik.http.routers.moneyimporter.service=moneyimporter"
+      - "traefik.http.routers.moneyimporter.tls=true"
     depends_on:
       - app
 volumes:
