@@ -6,6 +6,8 @@ services:
     restart: always
     volumes:
       - firefly_iii_upload:/var/www/html/storage/upload
+    networks:
+      - proxy
     environment:
       APP_ENV: local
       APP_DEBUG: "false"
@@ -107,11 +109,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.moneyimporter.rule=Host(`finances.warehouse.lan`)"
-      - "traefik.http.routers.moneyimporter.entrypoints=websecure"
-      - "traefik.http.services.moneyimporter.loadbalancer.server.port=8080"
-      - "traefik.http.routers.moneyimporter.service=moneyimporter"
-      - "traefik.http.routers.moneyimporter.tls=true"
+      - "traefik.http.routers.finances.rule=Host(`finances.warehouse.lan`)"
+      - "traefik.http.routers.finances.entrypoints=websecure"
+      - "traefik.http.services.finances.loadbalancer.server.port=8080"
+      - "traefik.http.routers.finances.service=finances"
+      - "traefik.http.routers.finances.tls=true"
 #    ports:
 #      - 8080
     depends_on:
@@ -215,7 +217,14 @@ services:
       - "traefik.http.routers.moneyimporter.tls=true"
     depends_on:
       - app
+    networks:
+      - proxy
+
 volumes:
   firefly_iii_upload:
   firefly_iii_db:
+
+networks:
+  proxy:
+    external: true
 
